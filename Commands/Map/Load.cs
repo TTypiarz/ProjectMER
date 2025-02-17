@@ -13,21 +13,24 @@ public class Load : ICommand
 
 	public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
 	{
-		if (arguments.Count == 0)
-		{
-			response = "You need to provide a map name!";
-			return false;
-		}
+        string description = "You need to provide a map name!";
+        bool success = false;
 
-		if (MapUtils.LoadMap(arguments.At(0)))
-		{
-			response = $"{arguments.At(0)} map has been loaded!";
-			return true;
-		}
-		else
-		{
-			response = $"{arguments.At(0)} map could not be loaded. Please check server console.";
-			return false;
-		}
+        if (arguments.Count > 0)
+        {
+            if (MapUtils.LoadMap(arguments.At(0)))
+            {
+                description = $"Map <color=white>{arguments.At(0)}</color> loaded successfully!";
+                success = true;
+            }
+            else
+            {
+                description = $"Map <color=white>{arguments.At(0)}</color> could not be loaded. Please check your server console for details.";
+                success = false;
+            }
+        }
+
+        response = CommandFormatting.GenerateColoredResponse(true, success, "Map Management", description);
+		return success;
 	}
 }

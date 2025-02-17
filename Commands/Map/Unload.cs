@@ -13,19 +13,23 @@ public class Unload : ICommand
 
 	public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
 	{
-		if (arguments.Count == 0)
+		string description = "Unloaded all maps!";
+		bool success = true;
+
+		if (arguments.Count > 0)
+		{
+            MapUtils.UnloadMap(arguments.At(0));
+            description = $"Unloaded map <color=white>{arguments.At(0)}</color>!";
+		}
+		else
 		{
 			foreach (string mapName in MapUtils.LoadedMaps.Keys.ToList())
 			{
 				MapUtils.UnloadMap(mapName);
 			}
-
-			response = "Unloaded all maps!";
-			return true;
 		}
 
-		MapUtils.UnloadMap(arguments.At(0));
-		response = $"Unload {arguments.At(0)} map!";
-		return true;
+		response = CommandFormatting.GenerateColoredResponse(true, success, "Map Management", description);
+		return success;
 	}
 }

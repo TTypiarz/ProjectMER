@@ -13,15 +13,17 @@ public class Save : ICommand
 
 	public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
 	{
-		if (arguments.Count == 0)
+        string description = "You need to provide a map name!";
+        bool success = false;
+
+        if (arguments.Count != 0)
 		{
-			response = "You need to provide a map name!";
-			return false;
+            MapUtils.SaveMap(arguments.At(0));
+            description = $"Saved current map as <color=white>{arguments.At(0)}</color>!";
+			success = true;
 		}
 
-		MapUtils.SaveMap(arguments.At(0));
-
-		response = $"Map named {arguments.At(0)} has been successfully saved!";
-		return true;
+		response = CommandFormatting.GenerateColoredResponse(true, success, "Map Management", description);
+		return success;
 	}
 }

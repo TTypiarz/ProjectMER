@@ -40,16 +40,14 @@ public class MapEditorParentCommand : ParentCommand
 
     protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
-        response = "\nPlease enter a valid subcommand:";
+        string description = string.Empty;
 
         foreach (ICommand command in AllCommands)
         {
-            // if (sender.CheckPermission($"mpr.{command.Command}"))
-            // {
-                response += $"\n\n<color=yellow><b>- {command.Command} ({string.Join(", ", command.Aliases)})</b></color>\n<color=white>{command.Description}</color>";
-            // }
+            description += $"\t<b>• {arguments.Array[0]} <color=yellow>{command.Command}</color> <color=#808080>/ {string.Join(" / ", command.Aliases)}</color></b>\n\t\t<color=#D3D3D3><i>{command.Description}</i></color>\n";
         }
 
-        return false;
+        response = CommandFormatting.GenerateResponse(true, "Commands", description);
+        return true;
     }
 }
